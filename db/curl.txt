@@ -1,0 +1,4 @@
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username":"beatrice","password":"1234"}' \
+  http://localhost:3000/api/users/register
