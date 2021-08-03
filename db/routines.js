@@ -2,7 +2,6 @@ const client = require("./client");
 const { getRoutineActivitiesByRoutine } = require("./routine_activities");
 const { getUserByUserName } = require("./users");
 
-
 async function getRoutineById(id) {
     try {
         console.log("id from getRoutineById", id)
@@ -14,10 +13,10 @@ async function getRoutineById(id) {
         if (!routine) {
             return null;
         }
-
+        console.log("routine from getRoutineById", routine)
         return routine
     } catch(error) {
-        console.error("Error in getRoutineById",error)
+        console.error("Error in getRoutineById", error)
         // throw error;
     }
 }

@@ -42,19 +42,32 @@ routineRouter.post('/', requireUser, async (req, res, next) => {
 //     update a routine
 
 routineRouter.patch('/:routineId', requireUser, async (req, res) => {
+
+    const { routineId } = req.params;
+    const { isPublic, name, goal } = req.body;
+    const { id: userId } = req.user;
+
     const updateFields = {};
-    // const {routineId} = req.params;
-    updateFields.id = req.params.routineId;
-    updateFields.name = req.body.name;
-    updateFields.goal = req.body.goal;
-    updateFields.isPublic = req.body.isPublic;
+    updateFields.id = routineId
+
+    if (isPublic) {
+        updateFields.isPublic = isPublic;
+      }
+      if (name) {
+        updateFields.name = name;
+      }
+      if (goal) {
+        updateFields.goal = goal;
+      }
 
     try {
-        const originalRoutine = await getRoutineById(req.params.routineId);
+        const originalRoutine = await getRoutineById(routineId);
 
-        if (originalRoutine.creatorId === req.user.id) {
+        if (originalRoutine.creatorId === userId) {
             const updatedRoutine = await updateRoutine(updatedFields);
-            return res.send(updatedRoutine)
+            if(updatedRoutine) {
+                res.send(updatedRoutine)
+            }
         }
 
     } catch (error) {
@@ -62,26 +75,6 @@ routineRouter.patch('/:routineId', requireUser, async (req, res) => {
     }
 
 })
-
-// activitiesRouter.patch('/:activityId', async(req, res) => {
-//     const updateFields = {};
-//     updateFields.id = req.params.activityId;
-//     updateFields.name = req.body.name;
-//     updateFields.description = req.body.description;
-
-//     try {
-
-//             const updatedActivity = await updateActivity(updateFields);
-//             console.log("updatedActivty result", updatedActivity)
-            
-//             return res.send(updatedActivity) 
-
-//     } catch (error) {
-//         throw error
-//     }
-
-// })
-
 
 // DELETE /routines/:routineId/
 routineRouter.delete('/:routineId', requireUser, async (req, res, next) => {
